@@ -10,9 +10,22 @@ socket.on('disconnect', () => {
 
 socket.on('newMessage', (message) => {
     let formatedTime = moment(message.createdAt).format('h:mm a');
-    let li = document.createElement("li");
-    li.innerText = `${message.from} ${formatedTime}: ${message.text}`;
-    document.getElementById('messages').appendChild(li);
+
+    let template = document.getElementById('message-template').innerHTML;
+    let html = Mustache.render(template, {
+        text: message.text,
+        from: message.from,
+        createdAt: formatedTime
+    });
+
+    document.getElementById('messages').innerHTML += html;
+
+
+
+
+    // let li = document.createElement("li");
+    // li.innerText = `${message.from} ${formatedTime}: ${message.text}`;
+    // document.getElementById('messages').appendChild(li);
 });
 
 socket.on('newLocationMessage', (message) => {
