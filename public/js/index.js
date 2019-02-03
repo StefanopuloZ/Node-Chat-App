@@ -23,27 +23,37 @@ socket.on('newLocationMessage', (message) => {
 document.getElementById('message-form').addEventListener('submit', function (event) {
     event.preventDefault();
 
+    let messageTextBox = document.getElementById('message');
+
     socket.emit('createMessage', {
         from: 'User',
-        text: document.getElementById('message').value
+        text: messageTextBox.value
     }, (data) => {
-
+        messageTextBox.value = '';
     });
 });
 
 let sendLocation = document.getElementById('send-location');
+
 sendLocation.addEventListener('click', function (event) {
     if (!navigator.geolocation) {
         return alert('Geolocation not supported by your browser');
     };
 
+    sendLocation.setAttribute('disabled', 'true');
+    sendLocation.innerText = 'Sending location...';
+
     navigator.geolocation.getCurrentPosition((position) => {
+        sendLocation.removeAttribute('disabled');
+        sendLocation.innerText = 'Send location';
         socket.emit('createLocationMessage', {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
         });
     }, () => {
         alert('Unable to fetch location');
+        sendLocation.removeAttribute('disabled');
+        sendLocation.innerText = 'Send location';
     }, {
             enableHighAccuracy: true,
             maximumAge: 3000,
