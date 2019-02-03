@@ -11,7 +11,7 @@ let generateMessage = (from, text) => {
 let generateLocationMessage = (from, lat, lon) => {
     return {
         from,
-        url: `https://www.google.com/maps?q=${lat}.${lon}`,
+        url: `https://www.google.com/maps/@?api=1&map_action=map&center=${lat},${lon}&zoom=11` ,
         createdAt: moment().valueOf()
     };
 };

@@ -19,20 +19,19 @@ socket.on('newMessage', (message) => {
     });
 
     document.getElementById('messages').innerHTML += html;
-
-
-
-
-    // let li = document.createElement("li");
-    // li.innerText = `${message.from} ${formatedTime}: ${message.text}`;
-    // document.getElementById('messages').appendChild(li);
 });
 
 socket.on('newLocationMessage', (message) => {
     let formatedTime = moment(message.createdAt).format('h:mm a'); 
-    let li = document.createElement("li");
-    li.innerHTML = `${message.from} ${formatedTime}: <a href="${message.url}" target="_blank">My location</a>`;
-    document.getElementById('messages').appendChild(li);
+
+    let template = document.getElementById('location-message-template').innerHTML;
+    let html = Mustache.render(template, {
+        url: message.url,
+        from: message.from,
+        createdAt: formatedTime
+    });
+
+    document.getElementById('messages').innerHTML += html;
 })
 
 document.getElementById('message-form').addEventListener('submit', function (event) {
