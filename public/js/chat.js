@@ -77,10 +77,8 @@ document.getElementById('message-form').addEventListener('submit', function (eve
     event.preventDefault();
 
     let messageTextBox = document.getElementById('message');
-    let params = deparam(window.location.search.slice(1));
 
     socket.emit('createMessage', {
-        from: params.name,
         text: messageTextBox.value
     }, (data) => {
         messageTextBox.value = '';
