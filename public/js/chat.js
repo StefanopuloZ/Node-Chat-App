@@ -16,11 +16,33 @@ let scrollToBottom = () => {
 };
 
 socket.on('connect', () => {
-    console.log('Connected to server.');
+    let params = deparam(window.location.search.slice(1));
+
+    socket.emit('join', params, (err) => {
+        if (err) {
+            alert(err);
+            window.location.href = '/';
+        } else {
+            console.log('No error.');
+        };
+    });
 });
 
 socket.on('disconnect', () => {
     console.log('Disconnected from server.');
+});
+
+socket.on('updateUserList', (users) => {
+    let ol = document.createElement('ol');
+    console.log('Users', users);
+
+    users.forEach((user) => {
+        let li = document.createElement('li');
+        li.innerHTML = user;
+        ol.appendChild(li);
+    });
+
+    document.getElementById('users').innerHTML = ol.outerHTML;
 });
 
 socket.on('newMessage', (message) => {
@@ -55,9 +77,10 @@ document.getElementById('message-form').addEventListener('submit', function (eve
     event.preventDefault();
 
     let messageTextBox = document.getElementById('message');
+    let params = deparam(window.location.search.slice(1));
 
     socket.emit('createMessage', {
-        from: 'User',
+        from: params.name,
         text: messageTextBox.value
     }, (data) => {
         messageTextBox.value = '';

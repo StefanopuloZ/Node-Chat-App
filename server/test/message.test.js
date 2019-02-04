@@ -18,7 +18,7 @@ describe('generateLocationMessage', () => {
         let result = generateLocationMessage('Admin', '1', '2');
 
         expect(result.from).toBe('Admin');
-        expect(result.url).toBe('https://www.google.com/maps?q=1.2');
+        expect(result.url).toBe('https://www.google.com/maps/@?api=1&map_action=map&center=1,2&zoom=11');
         expect(typeof result.createdAt).toBe('number');
     });
 })
